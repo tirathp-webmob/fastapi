@@ -1,0 +1,76 @@
+while True:
+    try:
+        conn = psycopg2.connect(host='localhost', database='fastapi',
+                                user='postgres', password=config('password'), cursor_factory=RealDictCursor)
+
+        cursor = conn.cursor()
+        print("Connection successful!!!")
+        break
+
+    except Exception as error:
+        print(f'Error:- {error}')
+        time.sleep(10)
+
+
+
+
+# Get posts using regular SQL queries.
+# @router.get("/")
+# def get_posts():
+#     cursor.execute(""" SELECT * FROM posts """)
+#     post = cursor.fetchall()
+#     return post
+# my_post = [{"name": "Tirath", "id": 65}]
+
+
+
+# Create posts using regular SQL queries
+# @router.post("/", status_code=status.HTTP_201_CREATED)
+# def create_posts(new_post: PostCreate):
+#     cursor.execute(""" INSERT INTO posts(name,company,email) VALUES(%s, %s, %s) RETURNING * """,
+#                    (new_post.name, new_post.company, new_post.email))
+#     post_dict = cursor.fetchone()
+#     conn.commit()
+#     return post_dict
+
+
+# Get single post using regular SQL queries
+# @router.get("/{id}")
+# def get_posts(id: str):
+
+#     cursor.execute(""" SELECT * FROM posts WHERE id = %s """, (id))
+
+#     testpost = cursor.fetchone()
+
+#     if not testpost:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND, detail="No Content found")
+
+#     return{'Data you asked for:- ': testpost}
+
+
+# Delete post using regular SQL queries.
+
+
+# @router.delete("/{id}")
+# def delete(id: str):
+#     cursor.execute(""" DELETE FROM posts WHERE id = %s returning * """, (id))
+#     index = cursor.fetchone()
+#     conn.commit()
+#     if index == None:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+#     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+# Update post using regular SQL queries
+# @router.put("/{id}")
+# def update(id: str, post: PostCreate):
+#     cursor.execute(""" UPDATE posts SET name = %s, company = %s, email = %s WHERE id = %s RETURNING * """,
+#                    ([post.name, post.company, post.email, (id)]))
+#     index = cursor.fetchone()
+#     conn.commit()
+#     if index == None:
+#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+#     return index
