@@ -1,8 +1,8 @@
-"""Create Post Table
+"""create posts table
 
-Revision ID: ea20664014be
-Revises:
-Create Date: 2022-02-10 11:51:42.247535
+Revision ID: 590bbc75c661
+Revises: 
+Create Date: 2022-02-10 17:25:19.489802
 
 """
 from alembic import op
@@ -10,11 +10,10 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'ea20664014be'
+revision = '590bbc75c661'
 down_revision = None
 branch_labels = None
 depends_on = None
-
 
 
 def upgrade():

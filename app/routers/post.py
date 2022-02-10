@@ -20,14 +20,19 @@ router = APIRouter(prefix="/posts", tags=['POSTS'])
 # Get posts using SQLAlchemy.
 @router.get("/", response_model=List[PostOut])
 def get_posts(db: Session = Depends(get_db),
-              user_id: int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, search: Optional[str] = ""):
+              user_id: int = Depends(oauth2.get_current_user), limit: int = 10, skip: int = 0, 
+              search: Optional[str] = ""):
 
-    posts = db.query(models.Post).filter(
-        models.Post.email.contains(search)).limit(limit).offset(skip).all()
 
-    results = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(models.Vote, models.Vote.post_id == models.Post.id, isouter=True).group_by(models.Post.id).filter(
-        models.Post.email.contains(search)).limit(limit).offset(skip).all()
-    return results
+    # post = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(models.Vote, models.Vote.      post_id == models.Post.id, isouter=True).group_by(models.Post.id).filter(models.Post.email.contains(search)).limit(limit).offset(skip).all()
+
+    post = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(models.Vote, models.Vote.      post_id == models.Post.id, isouter=True).group_by(models.Post.id).all()
+
+    if post == None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+
+    return post
 
 
 # Create posts using SQLAlchemy.
@@ -35,7 +40,7 @@ def get_posts(db: Session = Depends(get_db),
 def create_post(post: PostCreate, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
 
     post_dict = models.Post(owner_id=user_id.id, **post.dict())
-    print("------------",post_dict.owner_id)
+ 
     db.add(post_dict)
     db.commit()
     db.refresh(post_dict)
