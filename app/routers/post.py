@@ -33,10 +33,13 @@ def get_posts(db: Session = Depends(get_db),
 # Create posts using SQLAlchemy.
 @router.post("/", response_model=PostResponse)
 def create_post(post: PostCreate, db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
+
     post_dict = models.Post(owner_id=user_id.id, **post.dict())
+    print("------------",post_dict.owner_id)
     db.add(post_dict)
     db.commit()
     db.refresh(post_dict)
+
     return post_dict
 
 # Get single post using SQLALCHEMY
